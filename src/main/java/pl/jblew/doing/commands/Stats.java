@@ -23,7 +23,8 @@ import java.util.Locale;
 @CommandLine.Command(
         name = "stats",
         description = "Show project statistics",
-        mixinStandardHelpOptions = true
+        mixinStandardHelpOptions = true,
+        aliases = { "s", "st", "stat" }
 )
 public class Stats implements Runnable {
     @CommandLine.Option(names = {"-v", "--verbose"}, description = "Verbose")
@@ -56,9 +57,8 @@ public class Stats implements Runnable {
             if(!e.start.toLocalDate().isEqual(date)) {
                 date = e.start.toLocalDate();
                 System.out.println();
-                System.out.println(); // empty line if not first date
-                System.out.println("-------------------- \033[1m" + date.format(DateTimeFormatter.ISO_LOCAL_DATE)
-                        + "\033[0m (" + date.getDayOfWeek().getDisplayName(TextStyle.FULL, Locale.ENGLISH) + ") --------------------");
+                System.out.println("-------------------------- \033[1m" + date.format(DateTimeFormatter.ISO_LOCAL_DATE)
+                        + "\033[0m (" + date.getDayOfWeek().getDisplayName(TextStyle.FULL, Locale.ENGLISH) + ") --------------------------");
                 System.out.println();
             }
 
@@ -76,7 +76,7 @@ public class Stats implements Runnable {
 
         }
         System.out.println();
-        System.out.println("------------- ~~~ --------- ~~~ -------------");
+        System.out.println("----------------------- ~~~ --------- ~~~ -----------------------");
         System.out.println("  Duration: " + DurationFormatter.formatDuration(completeDuration));
         System.out.println();
     }

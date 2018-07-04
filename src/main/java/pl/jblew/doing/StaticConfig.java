@@ -7,6 +7,7 @@ import com.fasterxml.jackson.dataformat.yaml.YAMLGenerator;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 import java.io.File;
+import java.time.format.DateTimeFormatter;
 
 public class StaticConfig {
     public static String CONFIG_FILE = System.getProperty("user.home") + File.separator + ".doing.yml";
@@ -27,4 +28,6 @@ public class StaticConfig {
                     .enable(YAMLGenerator.Feature.INDENT_ARRAYS)
             )
             .registerModule(new JavaTimeModule());
+
+    public static DateTimeFormatter DATETIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 }

@@ -11,7 +11,8 @@ import java.util.Arrays;
 @CommandLine.Command(
         name = "use",
         description = "Select timesheet",
-        mixinStandardHelpOptions = true
+        mixinStandardHelpOptions = true,
+        aliases = { "u", "us" }
 )
 public class Use implements Runnable {
     @CommandLine.Parameters(index = "0", description = "Name of the timesheet")

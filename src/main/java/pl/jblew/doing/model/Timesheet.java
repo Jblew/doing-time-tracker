@@ -34,7 +34,6 @@ public class Timesheet {
         else {
             Entry lastEntry = entries.get(entries.size() - 1);
             lastEntry.stop = LocalDateTime.now();
-            lastEntry.duration = Duration.between(lastEntry.start, lastEntry.stop);
             return lastEntry;
         }
     }

@@ -3,6 +3,7 @@ package pl.jblew.doing.model;
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSetter;
+import pl.jblew.doing.StaticConfig;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -16,7 +17,6 @@ public class Entry {
     public String task = "";
     public String [] tags = {};
     public String comment= "";
-    public Duration duration = Duration.ZERO;
 
     @JsonIgnore
     public LocalDateTime start = LocalDateTime.MIN;
@@ -25,22 +25,24 @@ public class Entry {
 
     @JsonGetter
     public String getStart() {
-        return start.format(DateTimeFormatter.ISO_DATE_TIME);
+        return start.format(StaticConfig.DATETIME_FORMATTER);
     }
 
     @JsonSetter
     public void setStart(String start) {
-        this.start = LocalDateTime.parse(start, DateTimeFormatter.ISO_DATE_TIME);
+        this.start = LocalDateTime.parse(start, StaticConfig.DATETIME_FORMATTER);
     }
 
     @JsonGetter
     public String getStop() {
-        return stop.format(DateTimeFormatter.ISO_DATE_TIME);
+        if (stop.isEqual(LocalDateTime.MAX)) return "";
+        else return stop.format(StaticConfig.DATETIME_FORMATTER);
     }
 
     @JsonSetter
     public void setStop(String stop) {
-        this.stop = LocalDateTime.parse(stop, DateTimeFormatter.ISO_DATE_TIME);
+        if (stop == null || stop.trim().isEmpty()) this.stop = LocalDateTime.MAX;
+        else this.stop = LocalDateTime.parse(stop, StaticConfig.DATETIME_FORMATTER);
     }
 
     public Entry duplicate() {

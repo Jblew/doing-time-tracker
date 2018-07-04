@@ -16,7 +16,8 @@ import java.util.Arrays;
 @CommandLine.Command(
         name = "start",
         description = "Start task",
-        mixinStandardHelpOptions = true
+        mixinStandardHelpOptions = true,
+        aliases = { "sta", "r" }
 )
 public class Start implements Runnable {
     @CommandLine.Parameters(index = "0", description = "Name of the task")

@@ -12,7 +12,8 @@ import java.io.IOException;
 @CommandLine.Command(
         name = "add",
         description = "Add timesheet",
-        mixinStandardHelpOptions = true
+        mixinStandardHelpOptions = true,
+        aliases = { "a", "ad" }
 )
 public class Add implements Runnable{
     @CommandLine.Parameters(index = "0", description = "Name of the timesheet")

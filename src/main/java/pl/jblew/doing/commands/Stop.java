@@ -15,7 +15,8 @@ import java.time.LocalDateTime;
 @CommandLine.Command(
         name = "stop",
         description = "Stop task",
-        mixinStandardHelpOptions = true
+        mixinStandardHelpOptions = true,
+        aliases = { "sto", "b" }
 )
 public class Stop implements Runnable {
     @CommandLine.Option(names = {"-v", "--verbose"}, description = "Verbose")
