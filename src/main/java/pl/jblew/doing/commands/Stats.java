@@ -47,6 +47,7 @@ public class Stats implements Runnable {
 
     private void printPrety(Timesheet ts) {
         Duration completeDuration = Duration.ZERO;
+        Duration dailyDuration = Duration.ZERO;
 
         LocalDate date = LocalDate.MIN;
 
@@ -55,7 +56,9 @@ public class Stats implements Runnable {
         System.out.println("###############################################################################");
         for (Entry e : ts.entries) {
             if(!e.start.toLocalDate().isEqual(date)) {
+                System.out.println("                                                  daily work: " + DurationFormatter.formatDuration(dailyDuration));
                 date = e.start.toLocalDate();
+                dailyDuration = Duration.ZERO;
                 System.out.println();
                 System.out.println("-------------------------- \033[1m" + date.format(DateTimeFormatter.ISO_LOCAL_DATE)
                         + "\033[0m (" + date.getDayOfWeek().getDisplayName(TextStyle.FULL, Locale.ENGLISH) + ") --------------------------");
@@ -64,6 +67,7 @@ public class Stats implements Runnable {
 
             Duration d = Duration.between(e.start, (e.stop.isEqual(LocalDateTime.MAX)? LocalDateTime.now() : e.stop));
             completeDuration = completeDuration.plus(d);
+            dailyDuration = dailyDuration.plus(d);
             System.out.print("  ");
             System.out.print(e.start.toLocalTime().format(DateTimeFormatter.ofPattern("HH:mm")));
             System.out.print(" (" + DurationFormatter.formatDuration(d) + ")   ");
@@ -75,9 +79,10 @@ public class Stats implements Runnable {
             System.out.println();
 
         }
+        System.out.println("                                                  daily work: " + DurationFormatter.formatDuration(dailyDuration));
         System.out.println();
         System.out.println("----------------------- ~~~ --------- ~~~ -----------------------");
-        System.out.println("  Duration: " + DurationFormatter.formatDuration(completeDuration));
+        System.out.println("  Total work: " + DurationFormatter.formatDuration(completeDuration));
         System.out.println();
     }
 }
