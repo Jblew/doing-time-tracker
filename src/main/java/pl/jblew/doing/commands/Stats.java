@@ -50,7 +50,9 @@ public class Stats implements Runnable {
             System.out.print("  (" + DurationFormatter.formatDuration(d) + ") ");
             System.out.println(e.task);
             System.out.print("      " + e.subproject + " ");
-            System.out.println(Arrays.stream(e.tags).reduce("", (t1, t2) -> t1 + " " + "#" + t2));
+            System.out.print(Arrays.stream(e.tags).reduce("", (t1, t2) -> t1 + " " + "#" + t2));
+            if (e.stop.isEqual(LocalDateTime.MAX)) System.out.print(" --acive");
+            System.out.println();
 
         }
         System.out.println("------------");
