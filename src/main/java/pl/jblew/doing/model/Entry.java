@@ -8,6 +8,7 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.OffsetTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
 import java.util.Date;
 
 public class Entry {
@@ -40,5 +41,14 @@ public class Entry {
     @JsonSetter
     public void setStop(String stop) {
         this.stop = LocalDateTime.parse(stop, DateTimeFormatter.ISO_DATE_TIME);
+    }
+
+    public Entry duplicate() {
+        Entry e = new Entry();
+        e.subproject = this.subproject;
+        e.task = this.task;
+        e.tags = Arrays.copyOf(this.tags, this.tags.length);
+        e.comment = this.comment;
+        return e;
     }
 }

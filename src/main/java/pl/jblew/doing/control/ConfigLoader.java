@@ -14,7 +14,6 @@ public class ConfigLoader {
         File configFile = new File(StaticConfig.CONFIG_FILE);
         if (configFile.exists()) {
             c = StaticConfig.OBJECT_MAPPER.readValue(new File(StaticConfig.CONFIG_FILE), Config.class);
-            System.out.println("Config loaded");
         }
         else {
             System.out.println("Creating new config file in "+StaticConfig.CONFIG_FILE);

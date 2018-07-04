@@ -13,7 +13,8 @@ import pl.jblew.doing.commands.*;
         Stop.class,
         Stats.class,
         Add.class,
-        Use.class
+        Use.class,
+        Continue.class
     }
 )
 public class Doing implements Runnable {
