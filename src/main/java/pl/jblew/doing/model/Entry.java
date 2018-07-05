@@ -57,6 +57,7 @@ public class Entry {
         return e;
     }
 
+    @JsonIgnore
     public String getHumanFriendlyHash() {
         String tagsStr = Arrays.stream(tags).reduce("", (t1, t2) -> t1 + t2);
         return BaseEncoding.base32Hex().encode(Hashing.sha1().hashString(task+subproject+tagsStr, StandardCharsets.UTF_8).asBytes()).toLowerCase();
