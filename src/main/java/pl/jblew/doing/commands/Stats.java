@@ -1,5 +1,7 @@
 package pl.jblew.doing.commands;
 
+import com.google.common.hash.Hashing;
+import com.google.common.io.BaseEncoding;
 import picocli.CommandLine;
 import pl.jblew.doing.control.ConfigLoader;
 import pl.jblew.doing.control.TimesheetWriter;
@@ -12,6 +14,7 @@ import pl.jblew.doing.util.DurationFormatter;
 import javax.swing.text.DateFormatter;
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -70,12 +73,15 @@ public class Stats implements Runnable {
             dailyDuration = dailyDuration.plus(d);
             System.out.print("  ");
             System.out.print(e.start.toLocalTime().format(DateTimeFormatter.ofPattern("HH:mm")));
-            System.out.print(" (" + DurationFormatter.formatDuration(d) + ")   ");
-            System.out.print("[" + e.subproject + "]   ");
-            System.out.print(Arrays.stream(e.tags).reduce("", (t1, t2) -> t1 + " " + "#" + t2));
-            if (e.stop.isEqual(LocalDateTime.MAX)) System.out.print(" --acive");
+            System.out.print(" (" + DurationFormatter.formatDuration(d) + ") ");
+            System.out.print(e.getHumanFriendlyHash().substring(0, 4));
+            System.out.print("   [" + e.subproject + "]   ");
+            String tagsStr = Arrays.stream(e.tags).reduce("", (t1, t2) -> t1 + " " + "#" + t2);
+            System.out.print(tagsStr);
+            if (e.stop.isEqual(LocalDateTime.MAX)) System.out.print(" --active");
+
             System.out.println();
-            System.out.println("   \033[1m" + e.task+"\033[0m");
+            System.out.println("   \033[1m" + e.task+"\033[0m ");
             System.out.println();
 
         }

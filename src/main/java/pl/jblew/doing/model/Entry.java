@@ -3,8 +3,11 @@ package pl.jblew.doing.model;
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSetter;
+import com.google.common.hash.Hashing;
+import com.google.common.io.BaseEncoding;
 import pl.jblew.doing.StaticConfig;
 
+import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.OffsetTime;
@@ -52,5 +55,10 @@ public class Entry {
         e.tags = Arrays.copyOf(this.tags, this.tags.length);
         e.comment = this.comment;
         return e;
+    }
+
+    public String getHumanFriendlyHash() {
+        String tagsStr = Arrays.stream(tags).reduce("", (t1, t2) -> t1 + t2);
+        return BaseEncoding.base32Hex().encode(Hashing.sha1().hashString(task+subproject+tagsStr, StandardCharsets.UTF_8).asBytes()).toLowerCase();
     }
 }
