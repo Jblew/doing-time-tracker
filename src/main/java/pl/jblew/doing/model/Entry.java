@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.google.common.hash.Hashing;
 import com.google.common.io.BaseEncoding;
 import pl.jblew.doing.StaticConfig;
+import pl.jblew.doing.util.DurationFormatter;
 
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
@@ -61,5 +62,20 @@ public class Entry {
     public String getHumanFriendlyHash() {
         String tagsStr = Arrays.stream(tags).reduce("", (t1, t2) -> t1 + t2);
         return BaseEncoding.base32Hex().encode(Hashing.sha1().hashString(task+subproject+tagsStr, StandardCharsets.UTF_8).asBytes()).toLowerCase();
+    }
+
+    @JsonIgnore
+    public Duration getDuration() {
+        return Duration.between(start, (stop.isEqual(LocalDateTime.MAX)? LocalDateTime.now() : stop));
+    }
+
+    @JsonIgnore
+    public String getDescriptionLine() {
+        return start.toLocalTime().format(DateTimeFormatter.ofPattern("HH:mm"))
+         + " (" + DurationFormatter.formatDuration(this.getDuration()) + ") "
+         + getHumanFriendlyHash().substring(0, 4)
+         + "   [" + subproject + "]   "
+         + Arrays.stream(tags).reduce("", (t1, t2) -> t1 + " " + "#" + t2)
+         + (stop.isEqual(LocalDateTime.MAX) ? " --active" : "");
     }
 }

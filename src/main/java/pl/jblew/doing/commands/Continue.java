@@ -1,5 +1,6 @@
 package pl.jblew.doing.commands;
 
+import com.google.common.collect.Lists;
 import picocli.CommandLine;
 import pl.jblew.doing.control.ConfigLoader;
 import pl.jblew.doing.control.TimesheetWriter;
@@ -12,6 +13,9 @@ import java.io.File;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
 @CommandLine.Command(
         name = "continue",
@@ -24,6 +28,9 @@ public class Continue implements Runnable {
     @CommandLine.Option(names = {"-v", "--verbose"}, description = "Verbose")
     private boolean verbose = false;
 
+    @CommandLine.Parameters(index = "*", arity="0..1", description = "Start of hash of the task you want to continue")
+    private String hash = "";
+
     public Continue() {
 
     }
@@ -35,11 +42,25 @@ public class Continue implements Runnable {
             TimesheetWriter writer = new TimesheetWriter(new File(c.selectedTimesheetFile));
 
             Timesheet ts = writer.readTimesheet();
-            Entry e = ts.continueLastTask();
+
+            if (hash.trim().isEmpty()) {
+                Entry e = ts.continueLastTask();
+                System.out.println("Continue doing: " + e.task);
+                System.out.println("  " + e.getDescriptionLine());
+                System.out.println();
+            }
+            else {
+                Entry selectedEntry = Lists.reverse(ts.entries).stream()
+                        .filter(e -> e.getHumanFriendlyHash().startsWith(hash.trim()))
+                        .findFirst().orElseThrow(() -> new TimesheetException("Task starting with this hash was not found."));
+                Entry started = ts.startTask(selectedEntry.duplicate());
+                System.out.println("Continue doing: " + started.task);
+                System.out.println("  " + started.getDescriptionLine());
+                System.out.println();
+            }
 
             writer.writeTimesheet(ts);
 
-            System.out.println("Continuing doing " + e.task + " (" + e.subproject + ") " + Arrays.stream(e.tags).reduce("", (t1, t2) -> t1 + " " + "#" + t2));
         } catch (IOException e1) {
             System.err.println("IOException: " + e1.getMessage());
             if (verbose) e1.printStackTrace();

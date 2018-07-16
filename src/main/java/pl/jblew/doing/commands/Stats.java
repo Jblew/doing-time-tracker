@@ -35,6 +35,7 @@ public class Stats implements Runnable {
 
     @Override
     public void run() {
+        long startMs = System.currentTimeMillis();
         try {
             Config c = ConfigLoader.loadConfig();
             TimesheetWriter writer = new TimesheetWriter(new File(c.selectedTimesheetFile));
@@ -54,41 +55,37 @@ public class Stats implements Runnable {
 
         LocalDate date = LocalDate.MIN;
 
-        System.out.println("###############################################################################");
-        System.out.println("################################# \033[1mDOING STATS\033[0m #################################");
-        System.out.println("###############################################################################");
+        StringBuilder outBuilder = new StringBuilder();
+
+        outBuilder.append("###############################################################################\n");
+        outBuilder.append("################################# \033[1mDOING STATS\033[0m #################################\n");
+        outBuilder.append("###############################################################################\n");
         for (Entry e : ts.entries) {
             if(!e.start.toLocalDate().isEqual(date)) {
-                System.out.println("                                                  daily work: " + DurationFormatter.formatDuration(dailyDuration));
+                outBuilder.append("                                                  daily work: " + DurationFormatter.formatDuration(dailyDuration)+"\n");
                 date = e.start.toLocalDate();
                 dailyDuration = Duration.ZERO;
-                System.out.println();
-                System.out.println("-------------------------- \033[1m" + date.format(DateTimeFormatter.ISO_LOCAL_DATE)
-                        + "\033[0m (" + date.getDayOfWeek().getDisplayName(TextStyle.FULL, Locale.ENGLISH) + ") --------------------------");
-                System.out.println();
+                outBuilder.append("\n");
+                outBuilder.append("------------------------- \033[1m" + date.format(DateTimeFormatter.ISO_LOCAL_DATE)
+                        + "\033[0m (" + date.getDayOfWeek().getDisplayName(TextStyle.FULL, Locale.ENGLISH) + ") -------------------------\n");
+                outBuilder.append("\n");
             }
 
             Duration d = Duration.between(e.start, (e.stop.isEqual(LocalDateTime.MAX)? LocalDateTime.now() : e.stop));
             completeDuration = completeDuration.plus(d);
             dailyDuration = dailyDuration.plus(d);
-            System.out.print("  ");
-            System.out.print(e.start.toLocalTime().format(DateTimeFormatter.ofPattern("HH:mm")));
-            System.out.print(" (" + DurationFormatter.formatDuration(d) + ") ");
-            System.out.print(e.getHumanFriendlyHash().substring(0, 4));
-            System.out.print("   [" + e.subproject + "]   ");
-            String tagsStr = Arrays.stream(e.tags).reduce("", (t1, t2) -> t1 + " " + "#" + t2);
-            System.out.print(tagsStr);
-            if (e.stop.isEqual(LocalDateTime.MAX)) System.out.print(" --active");
 
-            System.out.println();
-            System.out.println("   \033[1m" + e.task+"\033[0m ");
-            System.out.println();
+
+            outBuilder.append("  " + e.getDescriptionLine()+"\n");
+            outBuilder.append("   \033[1m" + e.task+"\033[0m \n");
+            outBuilder.append("\n");
 
         }
-        System.out.println("                                                  daily work: " + DurationFormatter.formatDuration(dailyDuration));
-        System.out.println();
-        System.out.println("----------------------- ~~~ --------- ~~~ -----------------------");
-        System.out.println("  Total work: " + DurationFormatter.formatDuration(completeDuration));
-        System.out.println();
+        outBuilder.append("                                                  daily work: " + DurationFormatter.formatDuration(dailyDuration) + "\n");
+        outBuilder.append("\n");
+        outBuilder.append("----------------------- ~~~ --------- ~~~ -----------------------\n");
+        outBuilder.append("  Total work: " + DurationFormatter.formatDuration(completeDuration)+"\n");
+        outBuilder.append("\n");
+        System.out.println(outBuilder.toString());
     }
 }
