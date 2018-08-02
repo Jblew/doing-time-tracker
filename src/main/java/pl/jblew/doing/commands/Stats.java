@@ -21,7 +21,9 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.TextStyle;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 @CommandLine.Command(
         name = "stats",
@@ -52,6 +54,7 @@ public class Stats implements Runnable {
     private void printPrety(Timesheet ts) {
         Duration completeDuration = Duration.ZERO;
         Duration dailyDuration = Duration.ZERO;
+        Map<String, Duration> durationsOfTasks = new HashMap<>();
 
         LocalDate date = LocalDate.MIN;
 
@@ -74,9 +77,12 @@ public class Stats implements Runnable {
             Duration d = Duration.between(e.start, (e.stop.isEqual(LocalDateTime.MAX)? LocalDateTime.now() : e.stop));
             completeDuration = completeDuration.plus(d);
             dailyDuration = dailyDuration.plus(d);
+            durationsOfTasks.put(e.task,
+                    durationsOfTasks.containsKey(e.task) ? durationsOfTasks.get(e.task).plus(d) : d);
 
 
-            outBuilder.append("  " + e.getDescriptionLine()+"\n");
+            outBuilder.append("  " + e.getDescriptionLine() + "("
+                    + DurationFormatter.formatDuration(durationsOfTasks.get(e.task)) + " total)\n");
             outBuilder.append("   \033[1m" + e.task+"\033[0m \n");
             outBuilder.append("\n");
 
