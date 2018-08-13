@@ -20,10 +20,8 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.TextStyle;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @CommandLine.Command(
         name = "stats",
@@ -34,6 +32,9 @@ import java.util.Map;
 public class Stats implements Runnable {
     @CommandLine.Option(names = {"-v", "--verbose"}, description = "Verbose")
     private boolean verbose = false;
+
+    @CommandLine.Option(names = {"-f", "--filter"}, description = "Filter by tag or subproject")
+    private String filter = "";
 
     @Override
     public void run() {
@@ -52,6 +53,8 @@ public class Stats implements Runnable {
     }
 
     private void printPrety(Timesheet ts) {
+        List<Entry> entries = filterEntries(ts.entries);
+
         Duration completeDuration = Duration.ZERO;
         Duration dailyDuration = Duration.ZERO;
         Map<String, Duration> durationsOfTasks = new HashMap<>();
@@ -63,7 +66,7 @@ public class Stats implements Runnable {
         outBuilder.append("###############################################################################\n");
         outBuilder.append("################################# \033[1mDOING STATS\033[0m #################################\n");
         outBuilder.append("###############################################################################\n");
-        for (Entry e : ts.entries) {
+        for (Entry e : entries) {
             if(!e.start.toLocalDate().isEqual(date)) {
                 outBuilder.append("                                                  daily work: " + DurationFormatter.formatDuration(dailyDuration)+"\n");
                 date = e.start.toLocalDate();
@@ -93,5 +96,13 @@ public class Stats implements Runnable {
         outBuilder.append("  Total work: " + DurationFormatter.formatDuration(completeDuration)+"\n");
         outBuilder.append("\n");
         System.out.println(outBuilder.toString());
+    }
+
+    private List<Entry> filterEntries(List<Entry> entries) {
+        if (filter.isEmpty()) return entries;
+        
+        return entries.stream().filter(e ->
+                e.subproject.equalsIgnoreCase(filter)
+                || Arrays.asList(e.tags).stream().filter(t -> t.equalsIgnoreCase(filter)).findAny().isPresent()).collect(Collectors.toList());
     }
 }
