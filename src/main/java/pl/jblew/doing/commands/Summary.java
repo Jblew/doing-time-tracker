@@ -16,6 +16,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.TextStyle;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @CommandLine.Command(
         name = "summary",
@@ -26,6 +27,9 @@ import java.util.*;
 public class Summary implements Runnable {
     @CommandLine.Option(names = {"-v", "--verbose"}, description = "Verbose")
     private boolean verbose = false;
+
+    @CommandLine.Option(names = {"-f", "--filter"}, description = "Filter by tag or subproject")
+    private String filter = "";
 
     @Override
     public void run() {
@@ -44,13 +48,15 @@ public class Summary implements Runnable {
     }
 
     private void printPrety(Timesheet ts) {
+        List<Entry> entries = filterEntries(ts.entries);
+
         Map<String, Duration> durationsOfTags = new HashMap<>();
         Map<String, Duration> durationsOfSubprojects = new HashMap<>();
         Map<String, Duration> durationsOfTasks = new HashMap<>();
         StringBuilder outBuilder = new StringBuilder();
 
 
-        for (Entry e : ts.entries) {
+        for (Entry e : entries) {
             Duration d = Duration.between(e.start, (e.stop.isEqual(LocalDateTime.MAX)? LocalDateTime.now() : e.stop));
 
             durationsOfSubprojects.put(e.subproject,
@@ -81,5 +87,13 @@ public class Summary implements Runnable {
 
         outBuilder.append("\n");
         System.out.println(outBuilder.toString());
+    }
+
+    private List<Entry> filterEntries(List<Entry> entries) {
+        if (filter.isEmpty()) return entries;
+
+        return entries.stream().filter(e ->
+                e.subproject.equalsIgnoreCase(filter)
+                        || Arrays.asList(e.tags).stream().filter(t -> t.equalsIgnoreCase(filter)).findAny().isPresent()).collect(Collectors.toList());
     }
 }

@@ -100,7 +100,7 @@ public class Stats implements Runnable {
 
     private List<Entry> filterEntries(List<Entry> entries) {
         if (filter.isEmpty()) return entries;
-        
+
         return entries.stream().filter(e ->
                 e.subproject.equalsIgnoreCase(filter)
                 || Arrays.asList(e.tags).stream().filter(t -> t.equalsIgnoreCase(filter)).findAny().isPresent()).collect(Collectors.toList());
