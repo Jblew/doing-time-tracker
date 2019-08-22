@@ -7,16 +7,10 @@ package pl.jblew.doing.commands;
 
 import picocli.CommandLine;
 import pl.jblew.doing.control.ConfigLoader;
-import pl.jblew.doing.control.TimesheetWriter;
 import pl.jblew.doing.model.Config;
-import pl.jblew.doing.model.Entry;
-import pl.jblew.doing.model.Timesheet;
-import pl.jblew.doing.model.TimesheetException;
 
 import java.io.File;
 import java.io.IOException;
-import java.time.LocalDateTime;
-import java.util.Arrays;
 
 @CommandLine.Command(
         name = "edit",
@@ -59,7 +53,7 @@ public class Edit implements Runnable {
 
     private void openVimInTerminal(File f) throws IOException, InterruptedException {
         System.out.println("Entering VIM");
-        ProcessBuilder processBuilder = new ProcessBuilder("vim", f.getAbsolutePath());
+        ProcessBuilder processBuilder = new ProcessBuilder("vim", "+norm G", f.getAbsolutePath());
         processBuilder.inheritIO();
 
         Process p = processBuilder.start();
