@@ -17,6 +17,7 @@ import pl.jblew.doing.commands.*;
         Continue.class,
         Summary.class,
         Edit.class,
+        List.class,
     }
 )
 public class Doing implements Runnable {

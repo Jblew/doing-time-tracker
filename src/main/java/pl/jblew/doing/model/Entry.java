@@ -11,10 +11,8 @@ import pl.jblew.doing.util.DurationFormatter;
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.time.OffsetTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
-import java.util.Date;
 
 public class Entry {
     public String subproject = "";
