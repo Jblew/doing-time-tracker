@@ -249,3 +249,23 @@ Edit timesheet
 
 
 
+## Informations
+
+### Need help?
+
+- Feel free to email me at <jedrzej@lewandowski.doctor>
+
+
+
+### Would like to help?
+
+Warmly welcomed:
+
+- Bug reports via issues
+- Enhancement requests via via issues
+- Pull requests
+- Security reports to jedrzej@lewandowski.doctor
+
+---
+
+Made with ❤️ by [Jędrzej Lewandowski](https://jedrzej.lewandowski.doctor/)
