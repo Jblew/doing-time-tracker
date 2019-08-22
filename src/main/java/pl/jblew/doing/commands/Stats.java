@@ -11,22 +11,18 @@ import pl.jblew.doing.util.DurationFormatter;
 import java.io.File;
 import java.io.IOException;
 import java.time.Duration;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.time.format.TextStyle;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.List;
-import java.util.Locale;
 import java.util.stream.Collectors;
 
 @CommandLine.Command(
         name = "stats",
         description = "Show project statistics",
         mixinStandardHelpOptions = true,
-        aliases = { "s", "st", "stat" }
+        aliases = { "stat" }
 )
 public class Stats implements Runnable {
     @CommandLine.Option(names = {"-v", "--verbose"}, description = "Verbose")
@@ -54,45 +50,41 @@ public class Stats implements Runnable {
     private void printPrety(Timesheet ts) {
         List<Entry> entries = filterEntries(ts.entries);
 
-        Duration completeDuration = Duration.ZERO;
-        Duration dailyDuration = Duration.ZERO;
+        Map<String, Duration> durationsOfTags = new HashMap<>();
+        Map<String, Duration> durationsOfSubprojects = new HashMap<>();
         Map<String, Duration> durationsOfTasks = new HashMap<>();
-
-        LocalDate date = LocalDate.MIN;
-
         StringBuilder outBuilder = new StringBuilder();
 
-        outBuilder.append("###############################################################################\n");
-        outBuilder.append("################################# \033[1mDOING STATS\033[0m #################################\n");
-        outBuilder.append("###############################################################################\n");
-        for (Entry e : entries) {
-            if(!e.start.toLocalDate().isEqual(date)) {
-                outBuilder.append("                                                  daily work: " + DurationFormatter.formatDuration(dailyDuration)+"\n");
-                date = e.start.toLocalDate();
-                dailyDuration = Duration.ZERO;
-                outBuilder.append("\n");
-                outBuilder.append("------------------------- \033[1m" + date.format(DateTimeFormatter.ISO_LOCAL_DATE)
-                        + "\033[0m (" + date.getDayOfWeek().getDisplayName(TextStyle.FULL, Locale.ENGLISH) + ") -------------------------\n");
-                outBuilder.append("\n");
-            }
 
+        for (Entry e : entries) {
             Duration d = Duration.between(e.start, (e.stop.isEqual(LocalDateTime.MAX)? LocalDateTime.now() : e.stop));
-            completeDuration = completeDuration.plus(d);
-            dailyDuration = dailyDuration.plus(d);
+
+            durationsOfSubprojects.put(e.subproject,
+                    durationsOfSubprojects.containsKey(e.subproject) ? durationsOfSubprojects.get(e.subproject).plus(d) : d);
             durationsOfTasks.put(e.task,
                     durationsOfTasks.containsKey(e.task) ? durationsOfTasks.get(e.task).plus(d) : d);
-
-
-            outBuilder.append("  " + e.getDescriptionLine() + "("
-                    + DurationFormatter.formatDuration(durationsOfTasks.get(e.task)) + " total)\n");
-            outBuilder.append("   \033[1m" + e.task+"\033[0m \n");
-            outBuilder.append("\n");
-
+            Arrays.stream(e.tags).forEach(tag -> durationsOfTags.put(tag,
+                    durationsOfTags.containsKey(tag) ? durationsOfTags.get(tag).plus(d) : d));
         }
-        outBuilder.append("                                                  daily work: " + DurationFormatter.formatDuration(dailyDuration) + "\n");
+
         outBuilder.append("\n");
-        outBuilder.append("----------------------- ~~~ --------- ~~~ -----------------------\n");
-        outBuilder.append("  Total work: " + DurationFormatter.formatDuration(completeDuration)+"\n");
+        outBuilder.append("========== tasks ==========\n");
+        durationsOfTasks.forEach((task, duration) -> {
+            outBuilder.append(" - " + task + ": " + DurationFormatter.formatDuration(duration) + "\n");
+        });
+
+        outBuilder.append("\n");
+        outBuilder.append("========== subprojects ==========\n");
+        durationsOfSubprojects.forEach((subproject, duration) -> {
+            outBuilder.append(" - " + subproject + ": " + DurationFormatter.formatDuration(duration) + "\n");
+        });
+
+        outBuilder.append("\n");
+        outBuilder.append("========== tags ==========\n");
+        durationsOfTags.forEach((tag, duration) -> {
+            outBuilder.append(" #" + tag + ": " + DurationFormatter.formatDuration(duration) + "\n");
+        });
+
         outBuilder.append("\n");
         System.out.println(outBuilder.toString());
     }
@@ -102,6 +94,6 @@ public class Stats implements Runnable {
 
         return entries.stream().filter(e ->
                 e.subproject.equalsIgnoreCase(filter)
-                || Arrays.asList(e.tags).stream().filter(t -> t.equalsIgnoreCase(filter)).findAny().isPresent()).collect(Collectors.toList());
+                        || Arrays.asList(e.tags).stream().filter(t -> t.equalsIgnoreCase(filter)).findAny().isPresent()).collect(Collectors.toList());
     }
 }

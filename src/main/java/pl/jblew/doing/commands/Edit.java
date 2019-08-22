@@ -16,7 +16,7 @@ import java.io.IOException;
         name = "edit",
         description = "Edit timesheet",
         mixinStandardHelpOptions = true,
-        aliases = {"edi", "ed", "e"}
+        aliases = { "ed", "e"}
 )
 public class Edit implements Runnable {
 
