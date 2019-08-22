@@ -61,6 +61,10 @@ $ doing list
 $ doing use [PROJECT_NAME]
 ```
 
+> When you add a timesheet, a file named `.doing.yml`is created in your $HOME directory
+
+
+
 **Step 2** Manipulate tasks
 
 ```bash
@@ -83,12 +87,16 @@ $ doing list -f refactoring # Will show tasks with refactoring tag
 $ doing continue tu98 # this four letter hashes are printed by the `doing list` command
 ```
 
+
+
 **Step 3**: Make corrections in the timesheet
 
 ```bash
 # Will open vim on the last line
 $ doing edit
 ```
+
+
 
 **Step 4**: Summarize your work
 
@@ -98,6 +106,146 @@ $ doing stats
 # Summarize work on specific tag or subproject:
 $ doing stats -f cli-tool # Will show only stats for `cli-tool` subproject
 ```
+
+
+
+## Commands reference
+
+#### doing add — add a timesheet
+
+```bash
+$ doing add --help
+
+Usage: doing add [-hvV] <name> <path>
+Add timesheet
+      <name>      Name of the timesheet
+      <path>      Path to timesheet yaml file
+  -h, --help      Show this help message and exit.
+  -v, --verbose   Verbose
+  -V, --version   Print version information and exit.
+```
+
+
+
+#### doing use — switch to a timesheet
+
+```bash
+$ doing use --help
+
+Usage: doing use [-hvV] <name>
+Select timesheet
+      <name>      Name of the timesheet
+  -h, --help      Show this help message and exit.
+  -v, --verbose   Verbose
+  -V, --version   Print version information and exit.
+```
+
+
+
+####doing timesheets — list timesheets
+
+```bash
+$ doing timesheets --help
+
+Usage: doing timesheets [-hvV]
+List available timesheet
+  -h, --help      Show this help message and exit.
+  -v, --verbose   Verbose
+  -V, --version   Print version information and exit.
+```
+
+
+
+#### doing start — start a task
+
+```bash
+$ doing start --help
+
+Usage: doing start [-hvV] [-s=<subproject>] [-t=<tag>] [-t another tag]... <task>
+Start task
+      <task>         Name of the task
+  -h, --help         Show this help message and exit.
+  -s, --subproject=<subproject>
+                     Name of the subproject
+  -t, --tag=<tags>   Add tag (can specify multiple)
+  -v, --verbose      Verbose
+  -V, --version      Print version information and exit.
+```
+
+
+
+#### doing stop — stop a task
+
+```bash
+$ doing stop --help
+
+Usage: doing stop [-hvV]
+Stop task
+  -h, --help      Show this help message and exit.
+  -v, --verbose   Verbose
+  -V, --version   Print version information and exit.
+```
+
+
+
+#### doing continue — resume a task
+
+```bash
+$ doing continue --help
+
+Usage: doing continue [-hvV] [<hash>]
+Continue last task (duplicate & start)
+      [<hash>]    Start of hash of the task you want to continue
+  -h, --help      Show this help message and exit.
+  -v, --verbose   Verbose
+  -V, --version   Print version information and exit.
+```
+
+
+
+#### doing list — list tasks and calculate total time
+
+```bash
+$ doing list --help
+
+Usage: doing list [-hvV] [-f=<filter>]
+List or filter tasks
+  -f, --filter=<filter>   Filter by tag or subproject
+  -h, --help              Show this help message and exit.
+  -v, --verbose           Verbose
+  -V, --version           Print version information and exit.
+```
+
+
+
+#### doing stats — print statistics
+
+```bash
+$ doing stats --help
+
+Usage: doing stats [-hvV] [-f=<filter>]
+Show project statistics
+  -f, --filter=<filter>   Filter by tag or subproject
+  -h, --help              Show this help message and exit.
+  -v, --verbose           Verbose
+  -V, --version           Print version information and exit.
+```
+
+
+
+#### doing edit — edit the timesheet file
+
+```bash
+$ doing edit --help
+
+Usage: doing edit [-hvV]
+Edit timesheet
+  -h, --help      Show this help message and exit.
+  -v, --verbose   Verbose
+  -V, --version   Print version information and exit.
+```
+
+
 
 
 
