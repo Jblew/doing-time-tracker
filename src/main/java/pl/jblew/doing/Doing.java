@@ -11,10 +11,10 @@ import pl.jblew.doing.commands.*;
         Start.class,
         Stop.class,
         Stats.class,
+        List.class,
         Add.class,
         Use.class,
         Continue.class,
-        Summary.class,
         Edit.class,
         Timesheets.class,
     }
