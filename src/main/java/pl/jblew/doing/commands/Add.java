@@ -2,9 +2,7 @@ package pl.jblew.doing.commands;
 
 import picocli.CommandLine;
 import pl.jblew.doing.control.ConfigLoader;
-import pl.jblew.doing.control.TimesheetWriter;
 import pl.jblew.doing.model.Config;
-import pl.jblew.doing.model.Timesheet;
 
 import java.io.File;
 import java.io.IOException;

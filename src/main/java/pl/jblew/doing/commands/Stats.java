@@ -1,20 +1,15 @@
 package pl.jblew.doing.commands;
 
-import com.google.common.hash.Hashing;
-import com.google.common.io.BaseEncoding;
 import picocli.CommandLine;
 import pl.jblew.doing.control.ConfigLoader;
 import pl.jblew.doing.control.TimesheetWriter;
 import pl.jblew.doing.model.Config;
 import pl.jblew.doing.model.Entry;
 import pl.jblew.doing.model.Timesheet;
-import pl.jblew.doing.model.TimesheetException;
 import pl.jblew.doing.util.DurationFormatter;
 
-import javax.swing.text.DateFormatter;
 import java.io.File;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;

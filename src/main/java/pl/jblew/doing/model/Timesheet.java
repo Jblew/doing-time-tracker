@@ -1,13 +1,7 @@
 package pl.jblew.doing.model;
 
-import pl.jblew.doing.StaticConfig;
-
-import java.time.Duration;
 import java.time.LocalDateTime;
-import java.time.OffsetTime;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 
 public class Timesheet {

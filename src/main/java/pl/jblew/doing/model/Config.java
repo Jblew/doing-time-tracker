@@ -1,10 +1,7 @@
 package pl.jblew.doing.model;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import pl.jblew.doing.StaticConfig;
 
-import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 

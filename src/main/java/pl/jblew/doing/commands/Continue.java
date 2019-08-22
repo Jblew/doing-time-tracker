@@ -11,11 +11,6 @@ import pl.jblew.doing.model.TimesheetException;
 
 import java.io.File;
 import java.io.IOException;
-import java.time.LocalDateTime;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
 
 @CommandLine.Command(
         name = "continue",

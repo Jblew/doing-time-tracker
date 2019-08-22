@@ -4,13 +4,11 @@ import picocli.CommandLine;
 import pl.jblew.doing.control.ConfigLoader;
 import pl.jblew.doing.control.TimesheetWriter;
 import pl.jblew.doing.model.Config;
-import pl.jblew.doing.model.Entry;
 import pl.jblew.doing.model.Timesheet;
 import pl.jblew.doing.model.TimesheetException;
 
 import java.io.File;
 import java.io.IOException;
-import java.time.LocalDateTime;
 
 @CommandLine.Command(
         name = "stop",

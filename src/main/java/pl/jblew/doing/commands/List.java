@@ -9,9 +9,7 @@ import picocli.CommandLine;
 import pl.jblew.doing.control.ConfigLoader;
 import pl.jblew.doing.model.Config;
 
-import java.io.File;
 import java.io.IOException;
-import java.util.Arrays;
 
 @CommandLine.Command(
         name = "list",

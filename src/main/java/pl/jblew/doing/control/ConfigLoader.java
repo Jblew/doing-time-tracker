@@ -1,6 +1,5 @@
 package pl.jblew.doing.control;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
 import pl.jblew.doing.StaticConfig;
 import pl.jblew.doing.model.Config;
 

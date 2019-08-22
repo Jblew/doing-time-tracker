@@ -1,7 +1,6 @@
 package pl.jblew.doing;
 
 import picocli.CommandLine;
-import picocli.CommandLine.Option;
 import pl.jblew.doing.commands.*;
 
 
